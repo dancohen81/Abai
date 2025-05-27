@@ -92,55 +92,55 @@ The Abai controller supports various commands and can operate in different modes
 *   `set mode to [mode_name]`: Changes the active operational mode of the AI. Replace `[mode_name]` with one of the available modes listed below.
 *   `save project to [path]`: Saves the current Ableton Live project to the specified `[path]`.
 
-### Detaillierte Funktionen der MCP-Agenten
+### Detailed Functions of the MCP Agents
 
-Das MCP-System ist ein KI-gesteuertes Ableton Live-Kontrollsystem, das Benutzeranfragen versteht und an spezialisierte KI-Agenten weiterleitet. Jeder Agent ist für bestimmte Aufgabenbereiche zuständig und kann präzise JSON-Befehle an Ableton Live senden.
+The MCP system is an AI-driven Ableton Live control system that understands user requests and routes them to specialized AI agents. Each agent is responsible for specific task areas and can send precise JSON commands to Ableton Live.
 
-Hier ist eine Zusammenfassung der Funktionen, aufgeteilt nach den spezialisierten Agenten:
+Here is a summary of the functions, broken down by specialized agents:
 
-**1. Orchestrator AI (Zentrale Steuerung):**
-*   Versteht Benutzeranfragen und leitet sie an den am besten geeigneten spezialisierten Agenten weiter.
-*   Stellt sicher, dass die Ausgabe immer ein JSON-Objekt mit dem gewählten Agenten und der Nachricht für diesen Agenten ist.
-*   Leitet Anfragen, die keinem spezifischen Agenten zugeordnet werden können, an den `general_session_info_agent` weiter.
+**1. Orchestrator AI (Central Control):**
+*   Understands user requests and routes them to the most appropriate specialized agent.
+*   Ensures that the output is always a JSON object with the chosen agent and the message for that agent.
+*   Routes requests that cannot be assigned to a specific agent to the `general_session_info_agent`.
 
 **2. Arrangement Specialist AI:**
-*   **Strukturierung:** Hilft bei der Strukturierung musikalischer Ideen, dem Erstellen von Sektionen und dem Management des Songflusses.
-*   **Clip- und Szenenmanagement:** Kann Clips, Tracks und Szenen erstellen, duplizieren, löschen und anordnen.
-*   **Befehle:** `get_session_info`, `get_track_info`, `create_midi_track`, `create_audio_track`, `set_track_name`, `create_clip`, `add_notes_to_clip`, `set_clip_name`, `fire_clip`, `stop_clip`, `start_playback`, `stop_playback`, `duplicate_clip`, `delete_clip`, `move_clip`, `set_clip_loop_attributes`.
+*   **Structuring:** Helps with structuring musical ideas, creating sections, and managing the overall song flow.
+*   **Clip and Scene Management:** Can create, duplicate, delete, and arrange clips, tracks, and scenes.
+*   **Commands:** `get_session_info`, `get_track_info`, `create_midi_track`, `create_audio_track`, `set_track_name`, `create_clip`, `add_notes_to_clip`, `set_clip_name`, `fire_clip`, `stop_clip`, `start_playback`, `stop_playback`, `duplicate_clip`, `delete_clip`, `move_clip`, `set_clip_loop_attributes`.
 
 **3. Cutter/Editor Specialist AI:**
-*   **Präzise Bearbeitung:** Führt präzise Manipulationen von Clips (MIDI und Audio) und Noten innerhalb von MIDI-Clips aus.
-*   **Clip-Erstellung:** Kann neue MIDI-Clips erstellen und diese mit Noten basierend auf Benutzerbeschreibungen (z.B. Melodie, Rhythmus, Skala) füllen.
-*   **Granulare Kontrolle:** Versteht Parameter wie Start-/Endzeiten, Dauern, Velocities und Quantisierung.
-*   **Befehle:** `get_session_info`, `get_track_info`, `create_clip`, `add_notes_to_clip`, `update_notes_in_clip`, `delete_notes_from_clip`, `set_clip_name`, `set_clip_loop_attributes`, `set_clip_start_end`, `duplicate_clip`, `delete_clip`, `move_clip`, `set_clip_quantization`.
+*   **Precise Editing:** Performs precise manipulations of clips (MIDI and Audio) and notes within MIDI clips.
+*   **Clip Creation:** Can create new MIDI clips and populate them with notes based on user descriptions (e.g., melody, rhythm, scale).
+*   **Granular Control:** Understands parameters such as start/end times, durations, velocities, and quantization.
+*   **Commands:** `get_session_info`, `get_track_info`, `create_clip`, `add_notes_to_clip`, `update_notes_in_clip`, `delete_notes_from_clip`, `set_clip_name`, `set_clip_loop_attributes`, `set_clip_start_end`, `duplicate_clip`, `delete_clip`, `move_clip`, `set_clip_quantization`.
 
 **4. General Session Info Specialist AI:**
-*   **Informationsbereitstellung:** Bietet allgemeine Informationen über den aktuellen Ableton Live-Session-Status.
-*   **Systemfähigkeiten:** Beschreibt die Gesamtfunktionen und verfügbaren Befehle des KI-Systems.
-*   **Befehle:** `get_session_info`, `get_track_info`.
+*   **Information Provision:** Provides general information about the current Ableton Live session status.
+*   **System Capabilities:** Describes the overall functions and available commands of the AI system.
+*   **Commands:** `get_session_info`, `get_track_info`.
 
 **5. Mixing Specialist AI:**
-*   **Pegel- und Pan-Steuerung:** Hilft beim Einstellen von Lautstärken, Panning und Konfigurieren von Sends/Returns.
-*   **Signalfluss:** Kann Return-Tracks erstellen und Send-Pegel einstellen.
-*   **Sidechaining-Anleitung:** Bietet Anleitungen für Mixing-Techniken wie Sidechain-Kompression (manuelle Schritte).
-*   **Befehle:** `get_session_info`, `get_track_info`, `set_track_volume`, `set_track_pan`, `create_return_track`, `set_send_level`, `load_instrument_or_effect`.
+*   **Level and Pan Control:** Helps with setting volumes, panning, and configuring sends/returns.
+*   **Signal Flow:** Can create return tracks and set send levels.
+*   **Sidechaining Guidance:** Provides guidance for mixing techniques such as sidechain compression (manual steps).
+*   **Commands:** `get_session_info`, `get_track_info`, `set_track_volume`, `set_track_pan`, `create_return_track`, `set_send_level`, `load_instrument_or_effect`.
 
 **6. Rolling Bass Specialist AI:**
-*   **Psytrance Rolling Bass:** Spezialisiert auf die Erstellung von "Rolling Bass"-Mustern, insbesondere für Psytrance.
-*   **Track- und Instrumenten-Setup:** Kann MIDI-Tracks erstellen, Instrumente laden, Tempo einstellen und MIDI-Clips mit spezifischen Mustern erstellen.
-*   **Automatisierung & Anleitung:** Führt automatisierbare Schritte aus und gibt detaillierte Anweisungen für manuelle Schritte (z.B. Sidechaining).
-*   **Befehle:** `get_session_info`, `get_track_info`, `create_midi_track`, `set_track_name`, `create_clip`, `add_notes_to_clip`, `set_clip_name`, `set_tempo`, `fire_clip`, `stop_clip`, `start_playback`, `stop_playback`, `get_browser_tree`, `get_browser_items_at_path`, `load_instrument_or_effect`, `load_drum_kit`, `create_return_track`, `set_send_level`, `set_track_volume`.
+*   **Psytrance Rolling Bass:** Specializes in creating "Rolling Bass" patterns, particularly for Psytrance.
+*   **Track and Instrument Setup:** Can create MIDI tracks, load instruments, set tempo, and create MIDI clips with specific patterns.
+*   **Automation & Guidance:** Performs automatable steps and provides detailed instructions for manual steps (e.g., sidechaining).
+*   **Commands:** `get_session_info`, `get_track_info`, `create_midi_track`, `set_track_name`, `create_clip`, `add_notes_to_clip`, `set_clip_name`, `set_tempo`, `fire_clip`, `stop_clip`, `start_playback`, `stop_playback`, `get_browser_tree`, `get_browser_items_at_path`, `load_instrument_or_effect`, `load_drum_kit`, `create_return_track`, `set_send_level`, `set_track_volume`.
 
 **7. Sound Design Specialist AI:**
-*   **Instrumente & Effekte:** Hilft beim Laden von Instrumenten und Effekten, Anwenden von Presets und Anpassen von Parametern zur Klanggestaltung.
-*   **Kreative Vorschläge:** Kann Vorschläge für Sounddesign-Techniken machen.
-*   **Befehle:** `get_browser_tree`, `get_browser_items_at_path`, `load_instrument_or_effect`, `load_drum_kit`, `set_device_parameter` (hypothetisch), `get_track_info`.
+*   **Instruments & Effects:** Helps with loading instruments and effects, applying presets, and adjusting parameters for sound shaping.
+*   **Creative Suggestions:** Can make suggestions for sound design techniques.
+*   **Commands:** `get_browser_tree`, `get_browser_items_at_path`, `load_instrument_or_effect`, `load_drum_kit`, `set_device_parameter` (hypothetical), `get_track_info`.
 
 **8. Track Management Agent:**
-*   **Track- und Clip-Verwaltung:** Verantwortlich für das Löschen von Tracks, das Erstellen von MIDI-/Audio-Tracks, das Benennen von Tracks und das Erstellen von Clips.
-*   **Befehle:** `delete_track`, `create_midi_track`, `create_audio_track`, `set_track_name`, `create_clip`.
+*   **Track and Clip Management:** Responsible for deleting tracks, creating MIDI/audio tracks, naming tracks, and creating clips.
+*   **Commands:** `delete_track`, `create_midi_track`, `create_audio_track`, `set_track_name`, `create_clip`.
 
-Zusammenfassend lässt sich sagen, dass das MCP-System eine umfassende Suite von KI-Agenten bietet, die in der Lage sind, eine Vielzahl von Aufgaben in Ableton Live zu automatisieren und zu unterstützen, von der grundlegenden Session-Verwaltung über detaillierte Bearbeitung und Sounddesign bis hin zur spezialisierten Generierung von musikalischen Elementen wie Rolling Basslines.
+In summary, the MCP system offers a comprehensive suite of AI agents capable of automating and supporting a variety of tasks in Ableton Live, from basic session management to detailed editing and sound design, and specialized generation of musical elements like rolling basslines.
 
 ## Project Structure
 
