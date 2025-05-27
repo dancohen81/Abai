@@ -92,18 +92,55 @@ The Abai controller supports various commands and can operate in different modes
 *   `set mode to [mode_name]`: Changes the active operational mode of the AI. Replace `[mode_name]` with one of the available modes listed below.
 *   `save project to [path]`: Saves the current Ableton Live project to the specified `[path]`.
 
-### Available Modes (Agent-specific functionalities)
+### Detaillierte Funktionen der MCP-Agenten
 
-The following modes correspond to the specialized AI agents that the Orchestrator can route requests to:
+Das MCP-System ist ein KI-gesteuertes Ableton Live-Kontrollsystem, das Benutzeranfragen versteht und an spezialisierte KI-Agenten weiterleitet. Jeder Agent ist für bestimmte Aufgabenbereiche zuständig und kann präzise JSON-Befehle an Ableton Live senden.
 
-*   `arrangement`: Focuses on tasks related to arranging musical elements within Ableton Live.
-*   `cutter_editor`: Handles precise cutting and editing operations.
-*   `general_session_info`: Provides and manages general information about the Ableton session.
-*   `mixing_specialist`: Assists with mixing tasks, such as balancing levels, applying effects, and spatial positioning.
-*   `rolling_bass`: (Specific task-oriented mode) Likely for generating or manipulating rolling basslines.
-*   `sound_design`: Aids in creating and manipulating sounds and instrument patches.
-*   `track_management`: Manages tracks within Ableton Live, including creation, deletion, and organization.
-*   `default`: The initial mode, where the Orchestrator intelligently routes requests to the most appropriate agent based on the user's input.
+Hier ist eine Zusammenfassung der Funktionen, aufgeteilt nach den spezialisierten Agenten:
+
+**1. Orchestrator AI (Zentrale Steuerung):**
+*   Versteht Benutzeranfragen und leitet sie an den am besten geeigneten spezialisierten Agenten weiter.
+*   Stellt sicher, dass die Ausgabe immer ein JSON-Objekt mit dem gewählten Agenten und der Nachricht für diesen Agenten ist.
+*   Leitet Anfragen, die keinem spezifischen Agenten zugeordnet werden können, an den `general_session_info_agent` weiter.
+
+**2. Arrangement Specialist AI:**
+*   **Strukturierung:** Hilft bei der Strukturierung musikalischer Ideen, dem Erstellen von Sektionen und dem Management des Songflusses.
+*   **Clip- und Szenenmanagement:** Kann Clips, Tracks und Szenen erstellen, duplizieren, löschen und anordnen.
+*   **Befehle:** `get_session_info`, `get_track_info`, `create_midi_track`, `create_audio_track`, `set_track_name`, `create_clip`, `add_notes_to_clip`, `set_clip_name`, `fire_clip`, `stop_clip`, `start_playback`, `stop_playback`, `duplicate_clip`, `delete_clip`, `move_clip`, `set_clip_loop_attributes`.
+
+**3. Cutter/Editor Specialist AI:**
+*   **Präzise Bearbeitung:** Führt präzise Manipulationen von Clips (MIDI und Audio) und Noten innerhalb von MIDI-Clips aus.
+*   **Clip-Erstellung:** Kann neue MIDI-Clips erstellen und diese mit Noten basierend auf Benutzerbeschreibungen (z.B. Melodie, Rhythmus, Skala) füllen.
+*   **Granulare Kontrolle:** Versteht Parameter wie Start-/Endzeiten, Dauern, Velocities und Quantisierung.
+*   **Befehle:** `get_session_info`, `get_track_info`, `create_clip`, `add_notes_to_clip`, `update_notes_in_clip`, `delete_notes_from_clip`, `set_clip_name`, `set_clip_loop_attributes`, `set_clip_start_end`, `duplicate_clip`, `delete_clip`, `move_clip`, `set_clip_quantization`.
+
+**4. General Session Info Specialist AI:**
+*   **Informationsbereitstellung:** Bietet allgemeine Informationen über den aktuellen Ableton Live-Session-Status.
+*   **Systemfähigkeiten:** Beschreibt die Gesamtfunktionen und verfügbaren Befehle des KI-Systems.
+*   **Befehle:** `get_session_info`, `get_track_info`.
+
+**5. Mixing Specialist AI:**
+*   **Pegel- und Pan-Steuerung:** Hilft beim Einstellen von Lautstärken, Panning und Konfigurieren von Sends/Returns.
+*   **Signalfluss:** Kann Return-Tracks erstellen und Send-Pegel einstellen.
+*   **Sidechaining-Anleitung:** Bietet Anleitungen für Mixing-Techniken wie Sidechain-Kompression (manuelle Schritte).
+*   **Befehle:** `get_session_info`, `get_track_info`, `set_track_volume`, `set_track_pan`, `create_return_track`, `set_send_level`, `load_instrument_or_effect`.
+
+**6. Rolling Bass Specialist AI:**
+*   **Psytrance Rolling Bass:** Spezialisiert auf die Erstellung von "Rolling Bass"-Mustern, insbesondere für Psytrance.
+*   **Track- und Instrumenten-Setup:** Kann MIDI-Tracks erstellen, Instrumente laden, Tempo einstellen und MIDI-Clips mit spezifischen Mustern erstellen.
+*   **Automatisierung & Anleitung:** Führt automatisierbare Schritte aus und gibt detaillierte Anweisungen für manuelle Schritte (z.B. Sidechaining).
+*   **Befehle:** `get_session_info`, `get_track_info`, `create_midi_track`, `set_track_name`, `create_clip`, `add_notes_to_clip`, `set_clip_name`, `set_tempo`, `fire_clip`, `stop_clip`, `start_playback`, `stop_playback`, `get_browser_tree`, `get_browser_items_at_path`, `load_instrument_or_effect`, `load_drum_kit`, `create_return_track`, `set_send_level`, `set_track_volume`.
+
+**7. Sound Design Specialist AI:**
+*   **Instrumente & Effekte:** Hilft beim Laden von Instrumenten und Effekten, Anwenden von Presets und Anpassen von Parametern zur Klanggestaltung.
+*   **Kreative Vorschläge:** Kann Vorschläge für Sounddesign-Techniken machen.
+*   **Befehle:** `get_browser_tree`, `get_browser_items_at_path`, `load_instrument_or_effect`, `load_drum_kit`, `set_device_parameter` (hypothetisch), `get_track_info`.
+
+**8. Track Management Agent:**
+*   **Track- und Clip-Verwaltung:** Verantwortlich für das Löschen von Tracks, das Erstellen von MIDI-/Audio-Tracks, das Benennen von Tracks und das Erstellen von Clips.
+*   **Befehle:** `delete_track`, `create_midi_track`, `create_audio_track`, `set_track_name`, `create_clip`.
+
+Zusammenfassend lässt sich sagen, dass das MCP-System eine umfassende Suite von KI-Agenten bietet, die in der Lage sind, eine Vielzahl von Aufgaben in Ableton Live zu automatisieren und zu unterstützen, von der grundlegenden Session-Verwaltung über detaillierte Bearbeitung und Sounddesign bis hin zur spezialisierten Generierung von musikalischen Elementen wie Rolling Basslines.
 
 ## Project Structure
 
