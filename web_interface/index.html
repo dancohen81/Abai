@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ableton AI Controller</title>
+    <link rel="stylesheet" href="/src/style.css">
+  </head>
+  <body>
+    <div id="app">
+      <h1>Ableton AI Controller</h1>
+      <div id="session-info">
+        <h2>Current Ableton Session Info:</h2>
+        <pre id="session-info-display"></pre>
+      </div>
+      <div id="chat-container">
+        <div id="chat-history"></div>
+        <input type="text" id="user-input" placeholder="Type your message..." />
+        <button id="send-button">Send</button>
+      </div>
+      <div id="mode-display">Current Mode: <span id="current-mode">default</span></div>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

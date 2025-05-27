@@ -83,6 +83,32 @@ Abai is an AI-powered multi-agent system designed to control and assist with mus
     *   Type `set mode to [new_mode]` to change the AI's operational mode.
     *   Type `save project to [path]` to save the current Ableton project.
 
+## Running the Web Interface
+
+To use the web-based interface for the Ableton AI Controller, you need to start both the backend API and the frontend development server.
+
+1.  **Start the Backend API**:
+    Open a new terminal in the root directory of the project (`Abai/`) and run the following command:
+    ```bash
+    uvicorn backend.app:app --reload
+    ```
+    This will start the FastAPI backend, typically on `http://127.0.0.1:8000`.
+
+2.  **Start the Frontend Development Server**:
+    Open another new terminal and navigate to the `web_interface` directory:
+    ```bash
+    cd web_interface
+    ```
+    Then, install the frontend dependencies and start the development server:
+    ```bash
+    npm install
+    npm run dev
+    ```
+    This will start the Vite development server, typically on `http://localhost:5173` or `http://localhost:5174`.
+
+3.  **Access the Web Interface**:
+    Open your web browser and navigate to the URL provided by the Vite development server (e.g., `http://localhost:5174/`).
+
 ## Available Commands and Modes
 
 The Abai controller supports various commands and can operate in different modes, each leveraging specialized AI agents.
