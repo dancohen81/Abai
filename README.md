@@ -83,6 +83,28 @@ Abai is an AI-powered multi-agent system designed to control and assist with mus
     *   Type `set mode to [new_mode]` to change the AI's operational mode.
     *   Type `save project to [path]` to save the current Ableton project.
 
+## Available Commands and Modes
+
+The Abai controller supports various commands and can operate in different modes, each leveraging specialized AI agents.
+
+### Commands
+
+*   `set mode to [mode_name]`: Changes the active operational mode of the AI. Replace `[mode_name]` with one of the available modes listed below.
+*   `save project to [path]`: Saves the current Ableton Live project to the specified `[path]`.
+
+### Available Modes (Agent-specific functionalities)
+
+The following modes correspond to the specialized AI agents that the Orchestrator can route requests to:
+
+*   `arrangement`: Focuses on tasks related to arranging musical elements within Ableton Live.
+*   `cutter_editor`: Handles precise cutting and editing operations.
+*   `general_session_info`: Provides and manages general information about the Ableton session.
+*   `mixing_specialist`: Assists with mixing tasks, such as balancing levels, applying effects, and spatial positioning.
+*   `rolling_bass`: (Specific task-oriented mode) Likely for generating or manipulating rolling basslines.
+*   `sound_design`: Aids in creating and manipulating sounds and instrument patches.
+*   `track_management`: Manages tracks within Ableton Live, including creation, deletion, and organization.
+*   `default`: The initial mode, where the Orchestrator intelligently routes requests to the most appropriate agent based on the user's input.
+
 ## Project Structure
 
 *   `main.py`: Main entry point for the application.
