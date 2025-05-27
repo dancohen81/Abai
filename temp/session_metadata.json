@@ -1,0 +1,12 @@
+{
+    "tempo": 120.0,
+    "signature_numerator": 4,
+    "signature_denominator": 4,
+    "track_count": 7,
+    "return_track_count": 2,
+    "master_track": {
+        "name": "Master",
+        "volume": 0.8500000238418579,
+        "panning": 0.0
+    }
+}
