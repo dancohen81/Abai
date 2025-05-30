@@ -7,6 +7,7 @@ Specialized agent for managing tracks (e.g., deleting, creating, renaming).
 import json
 import re
 import asyncio # Import asyncio for async operations
+import sys # Import sys for debug mode
 from config import MODEL_NAME
 from rag_system import retrieve_knowledge
 from ableton_api_wrapper import (
@@ -37,14 +38,32 @@ async def process_request(user_input: str, conversation_history: list, current_m
         {"role": "user", "content": user_input}
     ]
 
+    if "--debug" in sys.argv:
+        print(f"[DEBUG] Sending to LLM with prompt: {agent_system_message[:500]}...") # Log first 500 chars of system prompt
+        
     try:
         llm_response_str = await get_llm_response(messages_for_llm)
+        
+        if "--debug" in sys.argv:
+            print(f"[DEBUG] LLM Response: {llm_response_str[:500]}...") # Log first 500 chars of LLM response
+
         # Attempt to parse the LLM's response as JSON
         llm_response_str = llm_response_str.strip()
-        if llm_response_str.startswith("```json") and llm_response_str.endswith("```"):
-            llm_response_str = llm_response_str[7:-3].strip()
         
-        parsed_response = json.loads(llm_response_str)
+        json_content = llm_response_str
+        start_marker = "```json"
+        end_marker = "```"
+
+        start_index = llm_response_str.find(start_marker)
+        end_index = llm_response_str.rfind(end_marker) # Use rfind to get the last occurrence
+
+        if start_index != -1 and end_index != -1 and end_index > start_index:
+            # Extract content between markers
+            # Add len(start_marker) to start_index to get past the marker
+            # Use end_index directly as it's the start of the end_marker
+            json_content = llm_response_str[start_index + len(start_marker) : end_index].strip()
+        
+        parsed_response = json.loads(json_content)
 
         if isinstance(parsed_response, dict) and parsed_response.get("clarification_needed"):
             return f"Track Management Agent: Clarification needed: {parsed_response.get('question')}"

@@ -7,6 +7,7 @@ Handles user input and orchestrates the multi-agent system.
 
 import asyncio
 import json # Import json module
+import sys # Import sys module for command-line arguments
 from agents.orchestrator import route_request
 from ableton_api_wrapper import get_session_info # Import get_session_info
 from utils import update_session_metadata # Import update_session_metadata
@@ -74,6 +75,10 @@ async def main():
 
         # Pass conversation history, current mode, and initial session info to the orchestrator
         response = await route_request(user_input, conversation_history, current_mode, initial_session_info)
+        
+        if "--debug" in sys.argv:
+            print(f"[DEBUG] Agent raw response: {response}")
+            
         print(f"AI: {response}")
 
         # Add AI's response to conversation history

@@ -30,9 +30,18 @@ async def get_llm_response(messages: List[Dict[str, str]]) -> str:
     # Using Gemini Flash 2.5 as requested
     model_name = "google/gemini-flash-1.5"
     
+    # Add a critical system message to reinforce execution mode
+    execution_reminder = {
+        "role": "system",
+        "content": "CRITICAL: You are in EXECUTION MODE. Generate JSON commands that will be executed, not instructions for humans."
+    }
+    
+    # Prepend this to messages
+    messages_with_reminder = [execution_reminder] + messages
+    
     payload = {
         "model": model_name,
-        "messages": messages
+        "messages": messages_with_reminder
     }
 
     try:
