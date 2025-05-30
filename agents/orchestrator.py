@@ -46,10 +46,15 @@ async def route_request(user_input: str, conversation_history: list, current_mod
         llm_response_str = await get_llm_response(messages_for_llm)
         # Attempt to parse the LLM's response as JSON
         llm_response_str = llm_response_str.strip()
-        if llm_response_str.startswith("```json") and llm_response_str.endswith("```"):
-            llm_response_str = llm_response_str[7:-3].strip()
-        
-        parsed_response = json.loads(llm_response_str)
+        # Use regex to extract JSON content from markdown code block
+        import re
+        json_match = re.search(r"```json\s*(.*?)\s*```", llm_response_str, re.DOTALL)
+        if json_match:
+            json_content = json_match.group(1)
+        else:
+            json_content = llm_response_str # Assume it's just JSON if no markdown block
+
+        parsed_response = json.loads(json_content)
         
         agent_name = parsed_response.get("agent")
         message_to_agent = parsed_response.get("message", user_input) # Use 'message' field from LLM response

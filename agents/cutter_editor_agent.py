@@ -18,7 +18,7 @@ from llm_utils import get_llm_response # Import the LLM utility function
 # Placeholder for Cutter/Editor Agent's system prompt (to be loaded from file)
 SYSTEM_PROMPT = ""
 try:
-    with open("ableton_ai_controller/prompts/cutter_editor_system_prompt.txt", "r") as f:
+    with open("prompts/cutter_editor_system_prompt.txt", "r") as f:
         SYSTEM_PROMPT = f.read()
 except FileNotFoundError:
     SYSTEM_PROMPT = "Error: Cutter/Editor system prompt file not found."
