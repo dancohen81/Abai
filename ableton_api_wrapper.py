@@ -8,13 +8,33 @@ import socket
 import json
 import logging
 import asyncio # Import asyncio
+import time # Also import time for unique IDs
 from dataclasses import dataclass
 from typing import List, Dict, Any, Union
+
+from rag_system import rag_instance
 
 # Configure logging
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger("AbletonAPIWrapper")
+
+def _add_to_rag_system(command_type: str, params: Dict[str, Any], result: Dict[str, Any]):
+    """Helper to add successful command execution details to the RAG system."""
+    doc_id = f"{command_type}_{int(time.time() * 1000)}"
+    content = f"Successfully executed command: {command_type}. Parameters: {params}. Result: {result}"
+    # Prepare metadata, ensuring all values are primitive types
+    cleaned_params = {k: str(v) if not isinstance(v, (str, int, float, bool, type(None))) else v for k, v in params.items()}
+    cleaned_result = {k: str(v) if not isinstance(v, (str, int, float, bool, type(None))) else v for k, v in result.items()}
+
+    metadata = {
+        "command_type": command_type,
+        "timestamp": time.time(),
+        **cleaned_params, # Include cleaned command parameters in metadata
+        **cleaned_result # Include cleaned command result in metadata
+    }
+    rag_instance.add_documents([{"id": doc_id, "content": content, "metadata": metadata}])
+    logger.info(f"Added command execution to RAG: {command_type}")
 
 @dataclass
 class AbletonConnection:
@@ -118,6 +138,9 @@ class AbletonConnection:
         ]
 
         try:
+            if command_type == "delete_clip":
+                raise Exception("The 'delete_clip' command is not directly supported by the Ableton Live API. It has been remapped to set the clip's length to 0, effectively making it invisible and unplayable.")
+
             logger.info(f"Sending command: {command_type} with params: {params}")
 
             # Send the command
@@ -143,6 +166,10 @@ class AbletonConnection:
             if response.get("status") == "error":
                 logger.error(f"Ableton error: {response.get('message')}")
                 raise Exception(response.get("message", "Unknown error from Ableton"))
+            
+            # If the command was successful and state-modifying, add to RAG
+            if is_modifying_command:
+                _add_to_rag_system(command_type, params, response.get("result", {}))
 
             # For state-modifying commands, add another small delay after receiving response
             if is_modifying_command:
@@ -285,8 +312,12 @@ async def duplicate_clip(track_index: int, clip_index: int, target_track_index: 
 
 # delete_clip
 async def delete_clip(track_index: int, clip_index: int):
-    """Deletes a clip."""
-    return await ableton_connection.send_command("delete_clip", {"track_index": track_index, "clip_index": clip_index})
+    """
+    Effectively "deletes" a clip by setting its start and end points to 0,
+    making it invisible and unplayable, as direct clip deletion is not supported.
+    """
+    logger.info(f"Attempting to 'delete' clip at track {track_index}, clip {clip_index} by setting its length to 0.")
+    return await ableton_connection.send_command("set_clip_start_end", {"track_index": track_index, "clip_index": clip_index, "start_time": 0.0, "end_time": 0.0})
 
 # move_clip
 async def move_clip(track_index: int, clip_index: int, new_start_time: float):
